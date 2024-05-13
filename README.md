@@ -6,7 +6,7 @@
 
 #views.py - this is where routes are defined.
 
-#models.py - this is where you define models for your application.
+#models - this is where you define models for your application.
 
 #static - contains static files i.e. CSS, Javascript, images
 
@@ -14,4 +14,4 @@
 
 #requirements.txt - this is where you store your package dependancies, you can use pip
 
-#yourappenv - your virtual environment for development 
+#env - your virtual environment for development 
