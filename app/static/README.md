@@ -1,0 +1,1 @@
+contains static files i.e. CSS, Javascript, images

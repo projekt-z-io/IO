@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<title>Logowanie - ParaBank</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    {{ form.login }}
+    {{ form.password }}
+    {{ form.submit }}
+</form>
+
+<a href="{{ url_for('register') }}">Nie masz konta? Zarejestruj sie</a>
+{% endblock %}

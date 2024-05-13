@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<title>ParaBank</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+<a href="{{ url_for('login') }}">Zaloguj sie</a>
+<br>
+<a href="{{ url_for('register') }}">Zarejestruj sie</a>
+
+{% endblock %}

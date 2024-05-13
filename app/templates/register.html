@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<title>Rejestracja - ParaBank</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    {{ form.first_name }}
+    {{ form.last_name }}
+    {{ form.email }}
+    {{ form.PESEL }}
+    {{ form.residence_address }}
+    {{ form.phone_number }}
+    {{ form.date_of_birth }}
+    {{ form.date_of_issue_of_id }}
+    {{ form.expiry_date_of_id }}
+    {{ form.place_of_birth }}
+    {{ form.father_name }}
+    {{ form.mother_name }}
+    {{ form.id_card_number }}
+    {{ form.issuing_authority }}
+    {{ form.nationality }}
+    {{ form.sex }}
+    {{ form.password }}
+    {{ form.repeated_password }}
+    {{ form.submit }}
+</form>
+
+<a href="{{ url_for('login') }}">Masz konto? Zaloguj sie</a>
+{% endblock %}
