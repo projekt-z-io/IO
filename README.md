@@ -2,14 +2,14 @@
 
 1. Make sure you've got python installed
 2. In CMD:
-    2.1. Create python virtual environment by:
+    2. 1. Create python virtual environment by:
         python3 -m venv env
-    2.2. Activate the virtualenv
+    2. 2. Activate the virtualenv
             (MacOS & Linux):
                 source env/bin/activate
             (Windows):
                 env\Scripts\activate
-3. pip install -r requirements.txt
+    2. 3. pip install -r requirements.txt
 4. run run.py and type localhost:5000 no your browser 
 
 # Post:
