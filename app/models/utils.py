@@ -1,7 +1,7 @@
 import app.models.validators as v
 import random
-from app.models.tables import iban_is_in_database, login_is_in_database
-from flask_login import UserMixin
+from app.models.tables import iban_is_in_database, login_is_in_database, find_max_customer_id
+#from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
@@ -16,7 +16,7 @@ def create_new_iban() -> str:
         if i == 99:
             raise Exception('Cannot create new iban. ??????')
 
-def create_new_customer_login() -> str:
+def create_new_login() -> str:
     characters = string.ascii_uppercase + string.digits
 
     for i in range(100):
@@ -25,10 +25,6 @@ def create_new_customer_login() -> str:
             return login
         if i == 99:
             raise Exception('Cannot create new login. ??????')
-
-
-
-
 
 def register_customer(form) -> bool:
 
@@ -53,49 +49,8 @@ def register_customer(form) -> bool:
                 return True
         return False
 
-# def register_customer(first_name :str, last_name:str, PESEL:str,
-#         residence_address:str, phone_number:str, date_of_birth: str, date_of_issue_of_id: str,
-#         expiry_date_of_id: str, place_of_birth: str,
-#         father_name: str, mother_name: str, id_card_number:str,
-#         issuing_authority: str, nationality: str, sex: bytes) -> bool:
-
-
-#         if not(validate_pesel(PESEL, sex)):
-#             return False
-#         if not(validate_birthdate(date_of_birth)):
-#             return False   
-#         if not(match_pesel_and_birthdate(PESEL, date_of_birth)):
-#             return False
-#         if not(send_validation_code(phone_number)):
-#             return False
-#         if not(validate_id_data(date_of_issue_of_id, expiry_date_of_id, place_of_birth, father_name, mother_name, id_card_number, issuing_authority, nationality, sex)):
-#             return False
-    
-#         for i in range(3):
-#             if check_person_via_camera():
-#                 user_base = User(first_name, last_name, PESEL, residence_address, phone_number, get_password_from_customer(), True)
-#                 new_customer = Customer(user_base, self.str_to_date(date_of_birth), self.str_to_date(date_of_issue_of_id), self.str_to_date(expiry_date_of_id), place_of_birth, father_name, mother_name, id_card_number, issuing_authority, nationality, sex, self.get_next_customer_id(database), 0.0, self.create_new_iban())
-#                 return True
-#         return False
-
-
-def customer_login(login: str, password: str) -> bool:
-    if login_is_in_database(login):
-        for i in range(3): 
-            if self.customers[customer_id].password == bcrypt.check_password_hash(password):
-                for i in range(3):
-                    if send_validation_code(self.customers[customer_id].phone_number):
-                        return True
-                    
-                self.customers[customer_id].account_active = False
-                return False
- 
-        self.customers[customer_id].account_active = False
-
-        # to register account
-    return False
-
-
+def create_new_customer_id(max_) -> str:
+    return str(max_+1)
 
 class Login_form(FlaskForm):
     login = StringField(validators=[InputRequired(), Length(min=15, max=15)], render_kw={'placeholder': 'Login'})

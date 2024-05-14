@@ -20,3 +20,4 @@ def email_is_in_database(email: str) -> bool:
     if Users.query.filter_by(email=email).first() == None:
         return False
     return True
+

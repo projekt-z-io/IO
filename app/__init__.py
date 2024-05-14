@@ -22,14 +22,17 @@ class Users(db.Model, UserMixin):
     account_active = db.Column(db.Boolean, nullable=False)
     residence_address = db.Column(db.String(100), nullable=False)
 
-class Customers(db.Model):
+    def get_id(self):
+        return self.pesel
+
+class Customers(db.Model, UserMixin):
     __tablename__ = "Customers"
     customer_id = db.Column(db.String(16), primary_key=True, unique=True)
     iban_number = db.Column(db.String(28), nullable=False, unique=True)
     account_balance = db.Column(db.Float, nullable=False)
     pesel = db.Column(db.String(11), db.ForeignKey('Users.pesel'))
 
-class PersonalData(db.Model):
+class PersonalData(db.Model, UserMixin):
     __tablename__ = "PersonalData"
     date_of_birth = db.Column(db.DateTime, nullable=False)
     date_of_issue_of_id = db.Column(db.DateTime, nullable=False)
