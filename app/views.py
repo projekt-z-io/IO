@@ -58,10 +58,10 @@ def register():
             customer_id = find_max_customer_id()+1
             new_customer = Customers(customer_id=customer_id, iban_number=create_new_iban(), account_balance=0.0, pesel=form.PESEL.data)
             db.session.add(new_customer)
-            db.session.commit()
+            db.session.commit()                         # tu cos nie działa
             new_personal_data = PersonalData(date_of_birth=form.date_of_birth.data, date_of_issue_of_id=form.date_of_issue_of_id.data, expiry_date_of_id=form.expiry_date_of_id.data, place_of_birth=form.place_of_birth.data, father_name=form.father_name.data, mother_name=form.mother_name.data, id_card_number=form.id_card_number.data, issuing_authority=form.issuing_authority.data, nationality=form.nationality.data, sex=form.sex.data, customer_id=customer_id)
             db.session.add(new_personal_data)
-            db.session.commit()
+            db.session.commit()                         # tu tez
             return redirect(url_for('login'))           # to do ekran powitalny
 
     
