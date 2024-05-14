@@ -11,6 +11,7 @@ def index():
 def index2():
     return render_template('index.html')
 
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = Login_form()
@@ -39,3 +40,4 @@ def register():
 @app.route("/dashboard")
 def dashboard():
     return render_template('dashboard.html')
+    

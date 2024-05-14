@@ -28,6 +28,8 @@ def create_new_customer_login() -> str:
 
 
 
+
+
 def register_customer(form) -> bool:
 
         if not(v.validate_email(form.email.data)):

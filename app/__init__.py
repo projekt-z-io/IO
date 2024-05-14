@@ -6,6 +6,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'secretkey'
 
+
+
+
 db = SQLAlchemy(app)
 class Users(db.Model, UserMixin):
     __tablename__ = "Users"
