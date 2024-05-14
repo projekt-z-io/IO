@@ -4,12 +4,18 @@
 #### 2. Make sure you've got python installed
 #### 3. In CMD:
 ##### 1. Create python virtual environment by:
-#####     python3 -m venv env
+#####     python3 -m venv env   // or python -m venv env
 ##### 2. Activate the virtualenv
 #####     (MacOS & Linux):
 #####         source env/bin/activate
 #####     (Windows):
 #####         env\Scripts\activate
+#### if you see this:
+##### env\Scripts\activate : File C:\path\env\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. (...)
+#### run Windows PowerShell as an Administrator
+#### run this command:
+#### Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+#### and then type: Y
 ##### 3. pip install -r requirements.txt
 #### 4. run run.py and type localhost:5000 no your browser 
 
