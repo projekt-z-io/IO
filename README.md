@@ -19,6 +19,10 @@
 ##### 3. pip install -r requirements.txt
 #### 4. run run.py and type localhost:5000 no your browser 
 
+
+#### if it doesn't work check if app.run(debug=True) in run.py
+
+
 # Post:
 if you wish to install some packages, don't forget to:
 
