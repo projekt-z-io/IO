@@ -23,4 +23,4 @@
 if you wish to install some packages, don't forget to:
 
 ### pip freeze > requirements.txt
-to save installed packages into the file.
+to save the installed packages into the file.
