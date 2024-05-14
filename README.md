@@ -15,5 +15,5 @@
 # Post:
 if you wish to install some packages, don't forget to:
 
-# pip freeze > requirements.txt
+## pip freeze > requirements.txt
 to save installed packages into the file.
