@@ -1,17 +1,19 @@
-# run.py - contains the actual python code that will import the app and start the development server.
+# How to setup app
 
-# config.py - stores configurations for your app.
+1. Make sure you've got python installed
+2. In CMD:
+    2.1. Create python virtual environment by:
+        python3 -m venv env
+    2.2. Activate the virtualenv
+            (MacOS & Linux):
+                source env/bin/activate
+            (Windows):
+                env\Scripts\activate
+3. pip install -r requirements.txt
+4. run run.py and type localhost:5000 no your browser 
 
-# __init__.py - initializes your application creating a Flask app instance.
+# Post:
+if you wish to install some packages, don't forget to:
 
-# views.py - this is where routes are defined.
-
-# models - this is where you define models for your application.
-
-# static - contains static files i.e. CSS, Javascript, images
-
-# templates - this is where you store your html templates i.e. index.html, layout.html
-
-# requirements.txt - this is where you store your package dependancies, you can use pip
-
-# env - your virtual environment for development 
+# pip freeze > requirements.txt
+to save installed packages into the file.
