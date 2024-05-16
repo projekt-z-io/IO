@@ -1,20 +1,22 @@
-# How to setup this app
+# How to setup this app?
+<br>
 ### On docker via the docker image:
 #### 1. docker pull stachu420/parabank
 #### 2. docker run -p 5000:5000 stachu420/parabank
 #### 3. type localhost:5000 on your browser 
-
+<br>
 ### Locally:
 #### 1. Clone this repo
 #### 2. Make sure you've got python installed
 #### 3. In CMD:
-##### 1. Create python virtual environment by:
-#####     python3 -m venv env   // or python -m venv env
-##### 2. Activate the virtualenv
-#####     (MacOS & Linux):
-#####         source env/bin/activate
-#####     (Windows):
-#####         env\Scripts\activate
+##### &nbsp 1. Create python virtual environment by:
+#####     &nbsp python3 -m venv env   // or python -m venv env
+##### &nbsp 2. Activate the virtualenv
+#####     &nbsp (MacOS & Linux):
+#####         &nbsp source env/bin/activate
+#####     &nbsp (Windows):
+#####         &nbsp env\Scripts\activate
+<br>
 #### if you see this:
 ##### env\Scripts\activate : File C:\path\env\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. (...)
 #### run Windows PowerShell as an Administrator
