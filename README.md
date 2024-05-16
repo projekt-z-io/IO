@@ -1,5 +1,10 @@
-# How to setup app
+# How to setup this app
+### On docker via the docker image:
+#### 1. docker pull stachu420/parabank
+#### 2. docker run -p 5000:5000 stachu420/parabank
+#### 3. type localhost:5000 on your browser 
 
+### Locally:
 #### 1. Clone this repo
 #### 2. Make sure you've got python installed
 #### 3. In CMD:
@@ -17,7 +22,7 @@
 #### Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 #### and then type: Y
 ##### 3. pip install -r requirements.txt
-#### 4. run run.py and type localhost:5000 no your browser 
+#### 4. run run.py and type localhost:5000 on your browser 
 
 
 #### if it doesn't work check if app.run(debug=True) in run.py
