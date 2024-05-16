@@ -3,15 +3,14 @@ import re
 import random
 def validate_pesel(pesel: str, sex: bytes) -> bool:
         if len(pesel) == 11 and pesel.isdigit():
-            match int(pesel[9])%2:           # tu pewnie trzeba castowac
-                case 0:
-                    if sex.lower() == 'k':
-                        return check_pesel_control_sum(pesel)
-                    return False
-                case 1:
-                    if sex.lower() == 'm':
-                        return check_pesel_control_sum(pesel)
-                    return False
+            if int(pesel[9])%2 == 0:
+                if sex.lower() == 'k':
+                    return check_pesel_control_sum(pesel)
+                return False
+            else:
+                if sex.lower() == 'm':
+                    return check_pesel_control_sum(pesel)
+                return False
         return False
 
 def check_pesel_control_sum(pesel: str) -> bool:
