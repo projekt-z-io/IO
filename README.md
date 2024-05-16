@@ -36,12 +36,19 @@
             ```bash
             env\Scripts\activate
             ```
+Note: If you encounter an error like "env\Scripts\activate : File C:\path\env\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. (...)", follow these steps:
 
-        Note: If you encounter an error like "env\Scripts\activate : File C:\path\env\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. (...)", run Windows PowerShell as an Administrator and execute the following command:
-        ```powershell
-        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
-        ```
-        Then type: `Y`.
+1. Open Windows PowerShell as an Administrator.
+
+2. Run the following command to set the execution policy:
+    ```powershell
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+    ```
+   
+3. Type `Y` to confirm the change when prompted.
+
+After executing these steps, you should be able to continue with the remaining instructions.
+
 
 4. Install the required packages:
     ```bash
