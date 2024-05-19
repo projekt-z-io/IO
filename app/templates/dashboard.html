@@ -7,8 +7,9 @@
     .container {
         height: 100vh;
         display: flex;
-        justify-content: center; 
-        align-items: center; 
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
     .link {
         color: blue;
@@ -20,9 +21,10 @@
 {% block body %}
 
 <div class="container">
-    <a href="https://www.youtube.com/watch?v=pw4nxAnaOuE" class="link">wpadles w ruw</a>
+    <a href="https://www.youtube.com/watch?v=pw4nxAnaOuE" class="link" target="_blank">wpadles w ruw</a>
     <br>
-    <a href="{{ url_for('logout') }}" class="link">wylogowanko</a>
+    <br>
+    <a href="{{ url_for('logout') }}" class="link">wylogowanie</a>
 </div>
 
 

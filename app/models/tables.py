@@ -13,8 +13,10 @@ def iban_is_in_database(iban: str) -> bool:
         return False
     return True
 
-def find_max_customer_id() -> str:
-    return Customers.query.with_entities(func.max(Customers.customer_id)).scalar()
+def customer_id_is_in_database(customer_id: str) -> bool:
+    if Customers.query.filter_by(customer_id=customer_id).first() == None:
+        return False
+    return True
 
 def email_is_in_database(email: str) -> bool:
     if Users.query.filter_by(email=email).first() == None:

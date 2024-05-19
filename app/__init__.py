@@ -32,6 +32,9 @@ class Customers(db.Model, UserMixin):
     account_balance = db.Column(db.Float, nullable=False)
     pesel = db.Column(db.String(11), db.ForeignKey('Users.pesel'))
 
+    def get_id(self):
+        return self.customer_id
+
 class PersonalData(db.Model, UserMixin):
     __tablename__ = "PersonalData"
     date_of_birth = db.Column(db.DateTime, nullable=False)
@@ -46,6 +49,9 @@ class PersonalData(db.Model, UserMixin):
     sex = db.Column(db.String(1), nullable=False)
     customer_id = db.Column(db.String(16), db.ForeignKey('Customers.customer_id'))
 
+    def get_id(self):
+        return self.id_card_number
+
 class Employees(db.Model):
     __tablename__ = "Employees"
     employee_id = db.Column(db.String(16), primary_key=True, unique=True)
@@ -53,17 +59,26 @@ class Employees(db.Model):
     room = db.Column(db.String(20), nullable=False)
     office = db.Column(db.String(20), nullable=False)
     shift = db.Column(db.Integer, nullable=False)# 0: 0-8, 1: 8-16, 2: 16-0
-    pesel = db.Column(db.String(11), db.ForeignKey('Users.pesel'))    
+    pesel = db.Column(db.String(11), db.ForeignKey('Users.pesel'))
+
+    def get_id(self):
+        return self.employee_id
 
 class Admins(db.Model):
     __tablename__ = "Admins"
     admin_id = db.Column(db.String(16), primary_key=True, unique=True)
     employee_id = db.Column(db.String(16), db.ForeignKey('Employees.employee_id'))
 
+    def get_id(self):
+        return self.admin_id
+
 class CustomerServiceEmployees(db.Model):
     __tablename__ = "CustomerServiceEmployees"
     cse_id = db.Column(db.String(16), primary_key=True, unique=True)
     employee_id = db.Column(db.String(16), db.ForeignKey('Employees.employee_id'))
+
+    def get_id(self):
+        return self.cse_id
 
 class Messages(db.Model):
     __tablename__ = "Messages"
@@ -73,6 +88,9 @@ class Messages(db.Model):
 
     customer_id = db.Column(db.String(16), db.ForeignKey('Customers.customer_id'), nullable=False)
     cse_id = db.Column(db.String(16), db.ForeignKey('CustomerServiceEmployees.cse_id'), nullable=False)
+
+    def get_id(self):
+        return self.message_id
 
 class Transfers(db.Model):
     __tablename__ = "Transfers"
@@ -84,6 +102,9 @@ class Transfers(db.Model):
     amount = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     sender_id = db.Column(db.String(16), db.ForeignKey('Customers.customer_id'), nullable=False)
+
+    def get_id(self):
+        return self.transfer_id
 
 with app.app_context():
     db.create_all()

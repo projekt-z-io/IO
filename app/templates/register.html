@@ -32,7 +32,13 @@
     {{ form.submit }}
 </form>
 
-
+{% if error != 0 %}
+    <h1>Error: {{ error_desc }} Error code: {{ error }}</h1>
+{% endif %}
 
 <a href="{{ url_for('login') }}">Masz konto? Zaloguj sie</a>
+
+
+
+
 {% endblock %}

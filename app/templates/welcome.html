@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<title>Witamy w ParaBanku</title>
+
+{% endblock %}
+
+{% block body %}
+
+<h1>Witamy w ParaBanku</h1>
+<br>
+<h1>Twoj login: {{ login }}</h1>
+<a href="{{ url_for('login') }}">Zaloguj sie</a>
+{% endblock %}

@@ -1,6 +1,6 @@
 import app.models.validators as v
 import random
-from app.models.tables import iban_is_in_database, login_is_in_database, find_max_customer_id
+from app.models.tables import iban_is_in_database, login_is_in_database, customer_id_is_in_database
 #from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -23,34 +23,60 @@ def create_new_login() -> str:
         login = ''.join(random.choice(characters) for _ in range(15))
         if not(login_is_in_database(login)):
             return login
-        if i == 99:
-            raise Exception('Cannot create new login. ??????')
+    raise Exception('Cannot create new login. ??????')
 
-def register_customer(form) -> bool:
+def register_customer(form) -> int:
 
         if not(v.validate_email(form.email.data)):
-            return False
+            return 1
         if not(form.password.data == form.repeated_password.data):
-            return False
+            return 2
         if not(v.validate_pesel(form.PESEL.data, form.sex.data)):
-            return False
+            return 3
         if not(v.validate_birthdate(form.date_of_birth.data)):
-            return False   
+            return 4   
         if not(v.match_pesel_and_birthdate(form.PESEL.data, form.date_of_birth.data)):
-            return False
+            return 5
         if not(v.send_validation_code(form.phone_number.data)):
-            return False
+            return 6
         if not(v.validate_id_data(form.date_of_issue_of_id.data, form.expiry_date_of_id.data, form.place_of_birth.data, form.father_name.data, form.mother_name.data,
                 form.id_card_number.data, form.issuing_authority.data, form.nationality.data, form.sex.data)):
-            return False
+            return 7
     
         for i in range(3):
             if v.check_person_via_camera():
-                return True
-        return False
+                return 0
+        return 8
 
-def create_new_customer_id(max_) -> str:
-    return str(max_+1)
+def match_register_error_to_description(error: int) -> str:
+    if error == 1:
+        return 'Podano niepoprawny email.'
+    if error == 2:
+        return 'Podane hasła nie sa identyczne.'
+    if error == 3:
+        return 'Podano niepoprawny PESEL lub plec.'
+    if error == 4:
+        return 'Podano niepoprawna date urodzenia.'
+    if error == 5:
+        return 'Data urodzenia i PESEL nie pasują do siebie.'
+    if error == 6:
+        return 'Blad kodu sms. Sprawdz swoj numer telefonu.'
+    if error == 7:
+        return 'Niepoprawne dane osobowe na dokumencie.'
+    if error == 8:
+        return 'Blad weryfikacji twarzy.'
+
+    return 'Cos poszlo nie tak... :(('
+
+def create_new_customer_id() -> str:
+    characters = string.ascii_uppercase + string.digits
+    for i in range(100):
+        random_string = ''.join(random.choice(characters) for _ in range(16))
+        if not(customer_id_is_in_database(random_string)):
+            return random_string
+
+    raise Exception('Cannot create new login. ??????')
+
 
 class Login_form(FlaskForm):
     login = StringField(validators=[InputRequired(), Length(min=15, max=15)], render_kw={'placeholder': 'Login'})
@@ -65,9 +91,9 @@ class Register_form(FlaskForm):
     email = StringField(validators=[InputRequired(), Length(min=2, max=50)], render_kw={'placeholder': 'Email'})
     residence_address = StringField(validators=[InputRequired(), Length(min=2, max=50)], render_kw={'placeholder': 'Adres zamieszkania'})
     phone_number = StringField(validators=[InputRequired(), Length(min=9, max=13)], render_kw={'placeholder': 'Numer telefonu'})
-    date_of_birth = StringField(validators=[InputRequired(), Length(min=10, max=10)], render_kw={'placeholder': 'Data urodzenia'})
-    date_of_issue_of_id = StringField(validators=[InputRequired(), Length(min=10, max=10)], render_kw={'placeholder': 'Data wydania dokumentu'})
-    expiry_date_of_id = StringField(validators=[InputRequired(), Length(min=10, max=10)], render_kw={'placeholder': 'Data waznosci dokumentu'})
+    date_of_birth = StringField(validators=[InputRequired(), Length(min=10, max=10)], render_kw={'placeholder': 'Data urodzenia dd-mm-yyyy'})
+    date_of_issue_of_id = StringField(validators=[InputRequired(), Length(min=10, max=10)], render_kw={'placeholder': 'Data wydania dokumentu dd-mm-yyyy'})
+    expiry_date_of_id = StringField(validators=[InputRequired(), Length(min=10, max=10)], render_kw={'placeholder': 'Data waznosci dokumentu dd-mm-yyyy'})
     place_of_birth = StringField(validators=[InputRequired(), Length(min=2, max=50)], render_kw={'placeholder': 'Miejsce urodzenia'})
     father_name = StringField(validators=[InputRequired(), Length(min=2, max=50)], render_kw={'placeholder': 'Imie ojca'})
     mother_name = StringField(validators=[InputRequired(), Length(min=2, max=50)], render_kw={'placeholder': 'Imie matki'})
