@@ -23,32 +23,36 @@
 3. In your command line:
 
     a. Create a Python virtual environment:
-        ```bash
-        python3 -m venv env   # or python -m venv env
-        ```
-
+    ```bash
+    python3 -m venv env
+    ```
+    or
+    ```bash
+    python -m venv env
+    ```
+        
     b. Activate the virtual environment:
-        - **MacOS & Linux**:
-            ```bash
-            source env/bin/activate
-            ```
-        - **Windows**:
-            ```bash
-            env\Scripts\activate
-            ```
+    - **MacOS & Linux**:
+    ```bash
+    source env/bin/activate
+    ```
+    - **Windows**:
+    ```powershell
+    env\Scripts\activate
+    ```
 
-        Note: If you encounter an error like "env\Scripts\activate : File C:\path\env\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. (...)", follow these steps:
+    Note: If you encounter an error like "env\Scripts\activate : File C:\path\env\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. (...)", follow these steps:
 
-        1. Open Windows PowerShell as an Administrator.
+    1. Open Windows PowerShell as an Administrator.
 
-        2. Run the following command to set the execution policy:
-            ```powershell
-            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
-            ```
+    2. Run the following command to set the execution policy:
+    ```powershell
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+    ```
            
-        3. Type `Y` to confirm the change when prompted.
+    3. Type `Y` to confirm the change when prompted.
 
-        After executing these steps, you should be able to continue with the remaining instructions.
+    After executing these steps, you should be able to continue with the remaining instructions.
 
 4. Install the required packages:
     ```bash
@@ -60,7 +64,7 @@
     python run.py
     ```
 
-6. Open `localhost:5000` in your web browser.
+6. Open `localhost:5000` in your web browser:
 
 If the application doesn't work, check if `app.run(debug=True)` is set in `run.py`.
 
@@ -68,3 +72,4 @@ If the application doesn't work, check if `app.run(debug=True)` is set in `run.p
 If you wish to install additional packages, don't forget to update the `requirements.txt` file by running:
 ```bash
 pip freeze > requirements.txt
+```
