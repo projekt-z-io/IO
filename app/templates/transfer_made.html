@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<title>Dokonano przelewu - ParaBank</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+<p>Dokonano przelewu</p>
+<p>Do: {{ dest_iban }}</p>
+<p>Na kwote: {{ amount }}</p>
+<p>Obecny stan konta: {{ balance }}</p>
+
+<a href="{{ url_for('dashoard') }}">Powrot</a>
+
+{% endblock %}
+
+

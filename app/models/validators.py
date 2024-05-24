@@ -90,7 +90,7 @@ def check_person_via_camera() -> bool:
     return True
 
 
-def validate_iban(iban) -> bool:
+def validate_iban(iban: str) -> bool:
 
     if not(len(iban) == 28):
         return False
@@ -111,3 +111,27 @@ def validate_email(email: str) -> bool:
         return True
     else:
         return False
+
+def valid_amount(amount: str)-> (bool, float):
+    amount= amount.strip()
+    regex_int = r'^[1-9]\d*$'
+    regex_float = r'^[1-9]\d*([,.]\d{1,2})?$'
+
+    if re.match(regex_int, amount):
+        return (True, float(amount)) 
+    elif re.match(regex_float, amount):
+        amount = amount.replace(",",".")
+        return (True, float(amount))
+    else:
+        return (False, 0)
+
+def validate_transfer(dest_iban: str, amount: str, customer_balance: float)-> (bool,float):
+    if not(validate_iban(dest_iban)):
+        return  (False,0)
+    valid, desired_amount = valid_amount(amount)
+    if not(valid):
+        return (False, 0)
+    if customer_balance < desired_amount:
+        return (False, 0)
+    
+    return (True, desired_amount)

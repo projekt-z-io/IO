@@ -102,7 +102,7 @@ class Transfers(db.Model):
     amount = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     sender_id = db.Column(db.String(16), db.ForeignKey('Customers.customer_id'), nullable=False)
-
+    
     def get_id(self):
         return self.transfer_id
 

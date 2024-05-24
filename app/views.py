@@ -1,8 +1,8 @@
 from app.__init__ import app, db, Customers, Users, PersonalData,CustomerServiceEmployees, Admins, bcrypt, Employees
 from flask import render_template, redirect, url_for, request
-from app.models.utils import Login_form, Register_form, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
+from app.models.utils import Login_form, Register_form, Transfer_form,send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
 from flask_login import login_user, LoginManager, logout_user, login_required, current_user
-from app.models.validators import str_to_date
+from app.models.validators import str_to_date, validate_transfer
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -44,7 +44,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-
 @app.route("/register",methods=['GET', 'POST'])
 def register():
     error = 0
@@ -69,7 +68,6 @@ def register():
 
     return render_template('register.html', form=form, error=error, error_desc=match_register_error_to_description(error))
 
-
 @app.route("/welcome", methods=['GET','POST'])
 def welcome():
     login = request.args.get('login')
@@ -85,15 +83,38 @@ def employee_login():
             return render_template('employee_login.html')
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
                 
                 cse = CustomerServiceEmployees.query.filter_by(employee_id=employee.employee_id).first()
                 if cse:
+                    login_user(user)
                     return redirect(url_for('cse_dashboard'))
                 
                 admin = Admins.query.filter_by(employee_id=employee.employee_id).first()
                 
                 if admin:
+                    login_user(user)
                     return redirect(url_for('admin_dashboard'))
 
-    return render_template('employee_login.html')
+    return render_template('employee_login.html', form=form)
+
+@app.route("/make_transfer", methods=['GET', 'POST'])
+@login_required
+def make_transfer():
+    login = current_user.login
+    user = Users.query.filter_by(login=login).first()
+    customer = Customers.query.filter_by(pesel=user.pesel).first()
+    form = Transfer_form()
+    if form.validate_on_submit():
+        amount = form.amount.data
+        dest_iban = form.iban_number.data
+        if validate_transfer(dest_iban=dest_iban, amount=amount, customer_balance=customer.account_balance):
+            send_transfer(dest_iban=dest_iban, source_iban=customer.iban_number, title=form.title.data,
+                           receiver_name=form.receiver_name.data, amount=amount, customer_id=customer.customer_id)
+            return render_template("transfer_made.html", dest_iban=dest_iban, amount=amount, current_balance=customer.account_balance)
+
+    return render_template("make_transfer.html",form=form, iban_source=customer.iban_number, balance=customer.account_balance)
+    
+@app.route("/transfer_history", methods=['GET','POST'])
+@login_required
+def transfer_history():
+    return render_template("transfer_history.html")

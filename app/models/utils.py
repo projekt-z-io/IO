@@ -1,12 +1,14 @@
 import app.models.validators as v
 import random
 from app.models.tables import iban_is_in_database, login_is_in_database, customer_id_is_in_database
-#from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from app.__init__ import bcrypt 
 import string
+from app.__init__ import db, Customers, Transfers
+import datetime
+
 
 def create_new_iban() -> str:
     for i in range(100):
@@ -77,12 +79,41 @@ def create_new_customer_id() -> str:
 
     raise Exception('Cannot create new login. ??????')
 
+def create_new_transfer_id() -> str:
+    characters = string.ascii_uppercase + string.digits
+    for i in range(100):
+        random_string = ''.join(random.choice(characters) for _ in range(64))
+        if not(iban_is_in_database(random_string)):
+            return random_string
+
+    raise Exception('Cannot create new tranfer id. ??????')
+
+def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str ,amount: float, customer_id: str):
+    customer = Customers.query.filter_by(iban_number=source_iban).first()
+    customer.account_balance -= amount                                                                              # moze commit???
+    new_transfer = Transfers(transfer_id=create_new_transfer_id(),sender_iban=source_iban, receiver_iban=dest_iban, 
+                             title=title, receiver_name=receiver_name, amount=amount, date=datetime.datetime.now(), sender_id=customer_id)
+
+    db.session.add(new_transfer)
+    db.session.commit()
+    if iban_is_in_database(dest_iban):
+        receiver = Customers.query.filter_by(iban_number=dest_iban).first()
+        receiver.account_balance += amount                                                                          # moze commit???
+
+
+
+class Transfer_form(FlaskForm):
+    amount = StringField(validators=[InputRequired(), Length(min=1)], render_kw={'placeholder': 'Wysokość przelewu'})
+    iban_destination = StringField(validators=[InputRequired(), Length(min=28, max=28)], render_kw={'placeholder': 'Nr IBAN konta docelowego'})
+    receiver_name = StringField(validators=[InputRequired(), Length(min=1)], render_kw={'placeholder': 'Nazwa odbiorcy'})
+    title = StringField(validators=[InputRequired(), Length(min=1)], render_kw={'placeholder': 'Tytul przelewu'})
+    submit = SubmitField("Wyslij")
+
 
 class Login_form(FlaskForm):
     login = StringField(validators=[InputRequired(), Length(min=15, max=15)], render_kw={'placeholder': 'Login'})
     password = PasswordField(validators=[InputRequired(), Length(min=8, max=30)], render_kw={'placeholder': 'Haslo'})
     submit = SubmitField("Login")
-
 
 class Register_form(FlaskForm):
     first_name = StringField(validators=[InputRequired(), Length(min=2, max=50)], render_kw={'placeholder': 'Imie'})

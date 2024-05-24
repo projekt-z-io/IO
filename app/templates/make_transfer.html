@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<title>Przelew - ParaBank</title>
+
+{% endblock %}
+
+
+{% block body %}
+
+<p> Konto bankowe, ktore zostanie obciazone: {{ iban_source }} </p>
+<p> Twoj stan konta: {{ "%.2f"|format(balance) }}</p>
+
+
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    {{ form.amount }}
+    {{ form.iban_destination }}
+    {{ form.receiver_name }}
+    {{ form.title }}
+    {{ form.submit }}
+</form>
+
+
+{% endblock %}
+
+
