@@ -1,4 +1,4 @@
-from app.__init__ import app, db, Customers, Users, PersonalData, bcrypt
+from app.__init__ import app, db, Customers, Users, PersonalData,CustomerServiceEmployees, Admins, bcrypt, Employees
 from flask import render_template, redirect, url_for, request
 from app.models.utils import Login_form, Register_form, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
 from flask_login import login_user, LoginManager, logout_user, login_required, current_user
@@ -74,3 +74,26 @@ def register():
 def welcome():
     login = request.args.get('login')
     return render_template('welcome.html', login=login)
+
+@app.route("/employee_login", methods=['GET','POST'])
+def employee_login():
+    form = Login_form()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(login=form.login.data).first()
+        employee = Employees.query.filter_by(pesel=user.pesel).first()
+        if not(employee):
+            return render_template('employee_login.html')
+        if user:
+            if bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user)
+                
+                cse = CustomerServiceEmployees.query.filter_by(employee_id=employee.employee_id).first()
+                if cse:
+                    return redirect(url_for('cse_dashboard'))
+                
+                admin = Admins.query.filter_by(employee_id=employee.employee_id).first()
+                
+                if admin:
+                    return redirect(url_for('admin_dashboard'))
+
+    return render_template('employee_login.html')

@@ -2,7 +2,7 @@
 
 {% block head %}
 
-<title>Logowanie - ParaBank</title>
+<title>Logowanie dla pracowników - ParaBank</title>
 
 {% endblock %}
 
@@ -17,9 +17,5 @@
     {{ form.submit }}
 </form>
 
-<a href="{{ url_for('register') }}">Nie masz konta? Zarejestruj sie</a>
-<a href="{{ url_for('employee_login') }}">Jesteś pracownikiem? Zaloguj się tutaj</a>
 
 {% endblock %}
-
-
