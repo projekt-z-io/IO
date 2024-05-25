@@ -115,7 +115,7 @@ def validate_email(email: str) -> bool:
 def valid_amount(amount: str)-> (bool, float):
     amount= amount.strip()
     regex_int = r'^[1-9]\d*$'
-    regex_float = r'^[1-9]\d*([,.]\d{1,2})?$'
+    regex_float =  r'^(?!0(\.0{1,2})?$)\d+([,.]\d{1,2})?$'
 
     if re.match(regex_int, amount):
         return (True, float(amount)) 
@@ -127,7 +127,7 @@ def valid_amount(amount: str)-> (bool, float):
 
 def validate_transfer(dest_iban: str, amount: str, customer_balance: float)-> (bool, float):
     if not(validate_iban(dest_iban)):
-        return  (False,0)
+        return  (False, 0)
     valid, desired_amount = valid_amount(amount)
     if not(valid):
         return (False, 0)

@@ -108,14 +108,18 @@ def beautify_transfer(transfers):
     return transfers
 
 
-def get_transfers(login: str, limit: int):
+def get_transfers(login: str, limit: int, offset: int = 0):
     user = Users.query.filter_by(login=login).first()
     customer = Customers.query.filter_by(pesel=user.pesel).first()
-    transfers_out = Transfers.query.filter_by(sender_id=customer.customer_id).limit(limit).all()
-    transfers_in = Transfers.query.filter_by(receiver_iban=customer.iban_number).limit(limit).all()
+    
+    transfers_out = Transfers.query.filter_by(sender_id=customer.customer_id).all()
+    transfers_in = Transfers.query.filter_by(receiver_iban=customer.iban_number).all()
+    
     transfers = transfers_in + transfers_out
     transfers.sort(key=lambda x: x.date, reverse=True)
-    return beautify_transfer(transfers)
+    
+    recent_transfers = transfers[:offset+limit]
+    return beautify_transfer(recent_transfers)
     
 
 class Transfer_form(FlaskForm):

@@ -114,7 +114,6 @@ def make_transfer():
         if ok:
             send_transfer(dest_iban=dest_iban, source_iban=customer.iban_number, title=form.title.data,
                            receiver_name=form.receiver_name.data, amount=amount_float, customer_id=customer.customer_id)
-            #newbalance
             return render_template("transfer_made.html", dest_iban=dest_iban, amount=amount_float, current_balance=customer.account_balance)
 
     return render_template("make_transfer.html",form=form, iban_source=customer.iban_number, balance=customer.account_balance)
@@ -122,8 +121,9 @@ def make_transfer():
 @app.route("/transfer_history", methods=['GET','POST'])
 @login_required
 def transfer_history():
-    limit = 10                                                                          #to do show more
-    transfers = get_transfers(current_user.login, limit)
+    limit = 10
+    offset = int(request.args.get('offset', 0))
+    transfers = get_transfers(current_user.login, limit, offset)
     pesel = current_user.pesel
     customer_id = Customers.query.filter_by(pesel=pesel).first().customer_id
-    return render_template("transfer_history.html", transfers=transfers, current_customer_id=customer_id)
+    return render_template("transfer_history.html", transfers=transfers, current_customer_id=customer_id, offset=offset, limit=limit)

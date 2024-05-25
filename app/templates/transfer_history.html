@@ -43,6 +43,11 @@
     {% endfor %}
 </table>
 
+<form method="get" action="/transfer_history">
+    <input type="hidden" name="offset" value="{{ offset + limit }}">
+    <button type="submit">Load More</button>
+</form>
+
 <a href="{{url_for('dashboard')}}">Powrót do panelu</a>
 
 {% endblock %}
