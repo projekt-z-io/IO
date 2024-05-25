@@ -6,7 +6,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from app.__init__ import bcrypt 
 import string
-from app.__init__ import db, Customers, Transfers
+from app.__init__ import db, Customers, Transfers, Users
 import datetime
 
 
@@ -101,6 +101,13 @@ def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str
         receiver.account_balance += amount                                                                          # moze commit???
 
 
+def get_transfers(login: str, limit: int):
+    user = Users.query.filter_by(login=login)
+    customer = Customers.query.filter_by(pesel=user.pesel)
+    transfers = Transfers.query.filter_by(sender_id=customer.client_id).limit(limit).all()
+    
+    return transfers
+    
 
 class Transfer_form(FlaskForm):
     amount = StringField(validators=[InputRequired(), Length(min=1)], render_kw={'placeholder': 'Wysokość przelewu'})

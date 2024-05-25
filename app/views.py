@@ -1,6 +1,6 @@
 from app.__init__ import app, db, Customers, Users, PersonalData,CustomerServiceEmployees, Admins, bcrypt, Employees
 from flask import render_template, redirect, url_for, request
-from app.models.utils import Login_form, Register_form, Transfer_form,send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
+from app.models.utils import Login_form, Register_form, Transfer_form,get_transfers, send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
 from flask_login import login_user, LoginManager, logout_user, login_required, current_user
 from app.models.validators import str_to_date, validate_transfer
 
@@ -117,4 +117,6 @@ def make_transfer():
 @app.route("/transfer_history", methods=['GET','POST'])
 @login_required
 def transfer_history():
-    return render_template("transfer_history.html")
+    limit = 10                                                                          #to do show more
+    transfers = get_transfers(current_user.login, limit)
+    return render_template("transfer_history.html", transfers=transfers)

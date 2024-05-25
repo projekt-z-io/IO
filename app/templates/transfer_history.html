@@ -9,7 +9,13 @@
 
 {% block body %}
 
-<p>to do</p>
+<ul>
+    {% for item in transfers %}
+        <li>item.receiver, item.amount, item.title, item.iban</li>
+    {% endfor %}
+</ul>
+
+<a href="{{url_for('dashboard')}}">Powrót do panelu</a>
 
 {% endblock %}
 
