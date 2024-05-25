@@ -102,12 +102,20 @@ def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str
         db.session.commit()
 
 
+def beautify_transfer(transfers):
+    for transfer in transfers:
+        transfer.formatted_date  = transfer.date.strftime("%H:%M %d-%m-%Y")
+    return transfers
+
 
 def get_transfers(login: str, limit: int):
     user = Users.query.filter_by(login=login).first()
     customer = Customers.query.filter_by(pesel=user.pesel).first()
-    transfers = Transfers.query.filter_by(sender_id=customer.customer_id).limit(limit).all()
-    return transfers
+    transfers_out = Transfers.query.filter_by(sender_id=customer.customer_id).limit(limit).all()
+    transfers_in = Transfers.query.filter_by(receiver_iban=customer.iban_number).limit(limit).all()
+    transfers = transfers_in + transfers_out
+    transfers.sort(key=lambda x: x.date, reverse=True)
+    return beautify_transfer(transfers)
     
 
 class Transfer_form(FlaskForm):

@@ -2,18 +2,46 @@
 
 {% block head %}
 
-<title>Historia przelewow wychodzacych- ParaBank</title>
+<title>Historia przelewow - ParaBank</title>
 
 {% endblock %}
 
 
 {% block body %}
 
-<ul>
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Receiver Name</th>
+        <th>Amount</th>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Receiver IBAN</th>
+        <th>Sender IBAN</th>
+    </tr>
     {% for item in transfers %}
-        <li>{{ item.receiver_name, item.amount, item.title, item.receiver_iban }}</li>
+        <tr>
+            {% if item.sender_id == current_customer_id %} <!-- wychodzacy -->
+                <td>OUT</td>
+                <td>{{ item.receiver_name }}</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.formatted_date }}</td>
+                <td>{{ item.receiver_iban }}</td>
+                <td>(Yours)</td>
+
+            {% else %}
+                <td>IN</td>
+                <td> You</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.formatted_date }}</td>
+                <td>(Yours)</td>
+                <td>{{ item.sender_iban }}</td>
+            {% endif %}
+        </tr>
     {% endfor %}
-</ul>
+</table>
 
 <a href="{{url_for('dashboard')}}">Powrót do panelu</a>
 

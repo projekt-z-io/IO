@@ -124,4 +124,6 @@ def make_transfer():
 def transfer_history():
     limit = 10                                                                          #to do show more
     transfers = get_transfers(current_user.login, limit)
-    return render_template("transfer_history.html", transfers=transfers)
+    pesel = current_user.pesel
+    customer_id = Customers.query.filter_by(pesel=pesel).first().customer_id
+    return render_template("transfer_history.html", transfers=transfers, current_customer_id=customer_id)
