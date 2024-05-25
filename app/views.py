@@ -14,7 +14,9 @@ login_manager.login_view = 'login'
 def load_user(pesel):
     return Users.query.get(pesel)
 
-
+# def test(amount):
+#     Customers.query.filter_by(pesel='59052624515').first().account_balance += amount
+    
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -36,7 +38,8 @@ def login():
 @app.route("/dashboard", methods=['GET','POST'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    balance = Customers.query.filter_by(pesel=current_user.pesel).first().account_balance
+    return render_template('dashboard.html', balance=balance)
 
 @app.route("/logout", methods=['GET', 'POST'])
 @login_required
@@ -106,11 +109,13 @@ def make_transfer():
     form = Transfer_form()
     if form.validate_on_submit():
         amount = form.amount.data
-        dest_iban = form.iban_number.data
-        if validate_transfer(dest_iban=dest_iban, amount=amount, customer_balance=customer.account_balance):
+        dest_iban = form.iban_destination.data
+        ok, amount_float = validate_transfer(dest_iban=dest_iban, amount=amount, customer_balance=customer.account_balance)
+        if ok:
             send_transfer(dest_iban=dest_iban, source_iban=customer.iban_number, title=form.title.data,
-                           receiver_name=form.receiver_name.data, amount=amount, customer_id=customer.customer_id)
-            return render_template("transfer_made.html", dest_iban=dest_iban, amount=amount, current_balance=customer.account_balance)
+                           receiver_name=form.receiver_name.data, amount=amount_float, customer_id=customer.customer_id)
+            #newbalance
+            return render_template("transfer_made.html", dest_iban=dest_iban, amount=amount_float, current_balance=customer.account_balance)
 
     return render_template("make_transfer.html",form=form, iban_source=customer.iban_number, balance=customer.account_balance)
     

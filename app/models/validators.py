@@ -125,7 +125,7 @@ def valid_amount(amount: str)-> (bool, float):
     else:
         return (False, 0)
 
-def validate_transfer(dest_iban: str, amount: str, customer_balance: float)-> (bool,float):
+def validate_transfer(dest_iban: str, amount: str, customer_balance: float)-> (bool, float):
     if not(validate_iban(dest_iban)):
         return  (False,0)
     valid, desired_amount = valid_amount(amount)

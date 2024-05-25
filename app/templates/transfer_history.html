@@ -2,7 +2,7 @@
 
 {% block head %}
 
-<title>Historia przelewow - ParaBank</title>
+<title>Historia przelewow wychodzacych- ParaBank</title>
 
 {% endblock %}
 
@@ -11,7 +11,7 @@
 
 <ul>
     {% for item in transfers %}
-        <li>item.receiver, item.amount, item.title, item.iban</li>
+        <li>{{ item.receiver_name, item.amount, item.title, item.receiver_iban }}</li>
     {% endfor %}
 </ul>
 

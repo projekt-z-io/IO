@@ -12,9 +12,9 @@
 <p>Dokonano przelewu</p>
 <p>Do: {{ dest_iban }}</p>
 <p>Na kwote: {{ amount }}</p>
-<p>Obecny stan konta: {{ balance }}</p>
+<p>Obecny stan konta: {{ "%.2f"|format(current_balance) }}</p>
 
-<a href="{{ url_for('dashoard') }}">Powrot</a>
+<a href="{{ url_for('dashboard') }}">Powrot</a>
 
 {% endblock %}
 

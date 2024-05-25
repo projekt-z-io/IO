@@ -90,7 +90,7 @@ def create_new_transfer_id() -> str:
 
 def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str ,amount: float, customer_id: str):
     customer = Customers.query.filter_by(iban_number=source_iban).first()
-    customer.account_balance -= amount                                                                              # moze commit???
+    customer.account_balance -= amount
     new_transfer = Transfers(transfer_id=create_new_transfer_id(),sender_iban=source_iban, receiver_iban=dest_iban, 
                              title=title, receiver_name=receiver_name, amount=amount, date=datetime.datetime.now(), sender_id=customer_id)
 
@@ -98,14 +98,15 @@ def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str
     db.session.commit()
     if iban_is_in_database(dest_iban):
         receiver = Customers.query.filter_by(iban_number=dest_iban).first()
-        receiver.account_balance += amount                                                                          # moze commit???
+        receiver.account_balance += amount
+        db.session.commit()
+
 
 
 def get_transfers(login: str, limit: int):
-    user = Users.query.filter_by(login=login)
-    customer = Customers.query.filter_by(pesel=user.pesel)
-    transfers = Transfers.query.filter_by(sender_id=customer.client_id).limit(limit).all()
-    
+    user = Users.query.filter_by(login=login).first()
+    customer = Customers.query.filter_by(pesel=user.pesel).first()
+    transfers = Transfers.query.filter_by(sender_id=customer.customer_id).limit(limit).all()
     return transfers
     
 
