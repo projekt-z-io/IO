@@ -2,8 +2,11 @@ __pycache__
 *.pyc
 *.pyo
 *.pyd
-/env/*
+app/env/*
 *.vpp
 *.docx
 *.md
 files.txt
+*.odt
+*.pdf
+.gitignore
