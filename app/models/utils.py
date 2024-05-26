@@ -18,6 +18,13 @@ def create_new_iban() -> str:
         if i == 99:
             raise Exception('Cannot create new iban. ??????')
 
+def get_users(limit: int, offset: int) -> list:
+    users = Users.query.all()
+    users.sort(key=lambda x: v.pesel_to_birth_date(x.pesel), reverse=True)
+    sorted_users = users[:offset+limit]
+    return sorted_users
+
+
 def create_new_login() -> str:
     characters = string.ascii_uppercase + string.digits
 
