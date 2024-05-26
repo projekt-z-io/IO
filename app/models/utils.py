@@ -113,6 +113,15 @@ def create_new_cse_id() -> str:
 
     raise Exception('Cannot create new cse id. ??????')
 
+def create_new_admin_id() -> str:
+    characters = string.ascii_uppercase + string.digits
+    for i in range(100):
+        random_string = ''.join(random.choice(characters) for _ in range(16))
+        if not(cse_id_is_in_database(random_string)):
+            return random_string
+
+    raise Exception('Cannot create new cse id. ??????')
+
 def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str ,amount: float, customer_id: str):
     customer = Customers.query.filter_by(iban_number=source_iban).first()
     customer.account_balance -= amount

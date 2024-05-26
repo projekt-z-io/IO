@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from app.__init__ import Users, Customers, Employees, CustomerServiceEmployees, Admins
+from app.__init__ import Users, Customers, Employees, CustomerServiceEmployees, Admins, Messages, db
 from sqlalchemy.sql import func
 
 def login_is_in_database(login: str) -> bool:
@@ -33,8 +33,18 @@ def cse_id_is_in_database(cse_id: str) -> bool:
         return False
     return True
 
+def admin_id_is_in_database(admin_id: str) -> bool:
+    if Admins.query.filter_by(admin_id=admin_id).first() == None:
+        return False
+    return True
+
 def user_is_employee(login: str) -> bool:
     pesel = Users.query.filter_by(login=login).first().pesel
     if  Employees.query.filter_by(pesel=pesel).first() == None:
         return False
     return True
+
+def delete_message_by_id(message_id: str):
+    message = Messages.query.filter_by(message_id=message_id).first()
+    db.session.delete(message)
+    db.session.commit()

@@ -17,7 +17,7 @@
         <th>Users's Login</th>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Account active</th>
+        <th>Active account</th>
     </tr>
     {% for item in users %}
     <tr>
@@ -25,17 +25,25 @@
         <td>{{ item.login }}</td>
         <td>{{ item.first_name }}</td>
         <td>{{ item.last_name }}</td>
+        {% if item.account_active == True %}
+        <td>Yes</td>
+        {% else %}
+        <td>No</td>
+        {% endif %}
         <td>
-            {% if item.account_active == True %}
-                <td>Yes</td>
-            {% else %}
-                <td>No</td>
-            {% endif %}
+            <form method="post" action="{{ url_for('change_account_activity', pesel=item.pesel) }}">
+                <button type="submit">Change Activity</button>
+            </form>
         </td>
     </tr>
-    <!-- to do dezaktywuj konto -->
     {% endfor %}
 </table>
+
+<form method="get" action="/admin_dashboard">
+    <input type="hidden" name="offset" value="{{ offset + limit }}">
+    <button type="submit">Load More</button>
+</form>
+
 
 
 <a href="{{ url_for('logout') }}" class="link">wylogowanie</a>

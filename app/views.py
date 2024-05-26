@@ -1,10 +1,10 @@
 from app.__init__ import app, db, Customers, Users, PersonalData,CustomerServiceEmployees, Admins, bcrypt, Employees, Messages
 from flask import render_template, redirect, url_for, request
-from app.models.utils import Login_form, Register_form, Transfer_form, get_messages, get_users ,get_transfers, send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
+from app.models.utils import Login_form, Register_form, Transfer_form, create_new_employee_id,create_new_admin_id ,get_messages, get_users ,get_transfers, send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
 from flask_login import login_user, LoginManager, logout_user, login_required, current_user
 from app.models.validators import str_to_date, validate_transfer
 import datetime
-from app.models.tables import user_is_employee
+from app.models.tables import user_is_employee, delete_message_by_id
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -110,6 +110,13 @@ def cse_dashboard():
     messages = get_messages(limit, offset)
     return render_template("cse_dashboard.html",messages=messages, offset=offset, limit=limit)
 
+@app.route("/delete_message/<string:message_id>", methods=['POST'])
+@login_required
+def delete_message(message_id):
+    delete_message_by_id(message_id)
+    return redirect(url_for('cse_dashboard'))
+
+
 @app.route("/admin_dashboard", methods=['GET','POST'])
 @login_required 
 def admin_dashboard():
@@ -117,6 +124,19 @@ def admin_dashboard():
     offset = int(request.args.get('offset', 0))
     users = get_users(limit, offset)
     return render_template('admin_dashboard.html', users=users ,offset=offset, limit=limit)
+
+@app.route("/change_account_activity/<string:pesel>", methods=['GET','POST'])
+@login_required
+def change_account_activity(pesel :str):
+    user = Users.query.filter_by(pesel=pesel).first()
+    user.account_active = not(user.account_active)
+    db.session.commit()
+    return redirect(url_for('admin_dashboard'))
+
+
+
+
+
 
 @app.route("/make_transfer", methods=['GET', 'POST'])
 @login_required
