@@ -1,8 +1,10 @@
-from app.__init__ import app, db, Customers, Users, PersonalData,CustomerServiceEmployees, Admins, bcrypt, Employees
+from app.__init__ import app, db, Customers, Users, PersonalData,CustomerServiceEmployees, Admins, bcrypt, Employees, Messages
 from flask import render_template, redirect, url_for, request
-from app.models.utils import Login_form, Register_form, Transfer_form,get_transfers, send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
+from app.models.utils import Login_form, Register_form, Transfer_form,create_new_cse_id,create_new_employee_id, get_messages ,get_transfers, send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
 from flask_login import login_user, LoginManager, logout_user, login_required, current_user
 from app.models.validators import str_to_date, validate_transfer
+import datetime
+from app.models.tables import user_is_employee
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -14,9 +16,7 @@ login_manager.login_view = 'login'
 def load_user(pesel):
     return Users.query.get(pesel)
 
-# def test(amount):
-#     Customers.query.filter_by(pesel='59052624515').first().account_balance += amount
-    
+
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -26,6 +26,8 @@ def index():
 def login():
     form = Login_form()
     if form.validate_on_submit():
+        if user_is_employee(form.login.data):
+            return redirect(url_for('employee_login'))
         user = Users.query.filter_by(login=form.login.data).first()
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
@@ -99,6 +101,19 @@ def employee_login():
                     return redirect(url_for('admin_dashboard'))
 
     return render_template('employee_login.html', form=form)
+
+@app.route("/cse_dashboard", methods=['GET','POST'])
+@login_required
+def cse_dashboard():
+    limit = 10
+    offset = int(request.args.get('offset', 0))
+    messages = get_messages(limit, offset)
+    return render_template("cse_dashboard.html",messages=messages, offset=offset, limit=limit)
+
+@app.route("/admin_dashboard", methods=['GET','POST'])
+@login_required 
+def admin_dashboard():
+    return render_template('admin_dashboard.html')
 
 @app.route("/make_transfer", methods=['GET', 'POST'])
 @login_required

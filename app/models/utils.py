@@ -1,12 +1,12 @@
 import app.models.validators as v
 import random
-from app.models.tables import iban_is_in_database, login_is_in_database, customer_id_is_in_database
+from app.models.tables import iban_is_in_database, login_is_in_database, customer_id_is_in_database, employee_id_is_in_database, cse_id_is_in_database
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from app.__init__ import bcrypt 
 import string
-from app.__init__ import db, Customers, Transfers, Users
+from app.__init__ import db, Customers, Transfers, Users, Messages
 import datetime
 
 
@@ -86,7 +86,25 @@ def create_new_transfer_id() -> str:
         if not(iban_is_in_database(random_string)):
             return random_string
 
-    raise Exception('Cannot create new tranfer id. ??????')
+    raise Exception('Cannot create new transfer id. ??????')
+
+def create_new_employee_id() -> str:
+    characters = string.ascii_uppercase + string.digits
+    for i in range(100):
+        random_string = ''.join(random.choice(characters) for _ in range(16))
+        if not(employee_id_is_in_database(random_string)):
+            return random_string
+
+    raise Exception('Cannot create new emlpoyee id. ??????')
+
+def create_new_cse_id() -> str:
+    characters = string.ascii_uppercase + string.digits
+    for i in range(100):
+        random_string = ''.join(random.choice(characters) for _ in range(16))
+        if not(cse_id_is_in_database(random_string)):
+            return random_string
+
+    raise Exception('Cannot create new cse id. ??????')
 
 def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str ,amount: float, customer_id: str):
     customer = Customers.query.filter_by(iban_number=source_iban).first()
@@ -102,10 +120,10 @@ def send_transfer(dest_iban: str, source_iban: str, title:str, receiver_name:str
         db.session.commit()
 
 
-def beautify_transfer(transfers):
-    for transfer in transfers:
-        transfer.formatted_date  = transfer.date.strftime("%H:%M %d-%m-%Y")
-    return transfers
+def beautify_date(list):
+    for item in list:
+        item.formatted_date  = item.date.strftime("%H:%M %d-%m-%Y")
+    return list
 
 
 def get_transfers(login: str, limit: int, offset: int = 0):
@@ -119,8 +137,15 @@ def get_transfers(login: str, limit: int, offset: int = 0):
     transfers.sort(key=lambda x: x.date, reverse=True)
     
     recent_transfers = transfers[:offset+limit]
-    return beautify_transfer(recent_transfers)
+    return beautify_date(recent_transfers)
     
+def get_messages(limit: int, offset: int = 0):    
+    messages = Messages.query.all()
+    messages.sort(key=lambda x: x.date, reverse=False)
+    former_messages = messages[:offset+limit]
+    return beautify_date(former_messages)
+
+
 
 class Transfer_form(FlaskForm):
     amount = StringField(validators=[InputRequired(), Length(min=1)], render_kw={'placeholder': 'Wysokość przelewu'})

@@ -10,6 +10,36 @@
 {% block body %}
 
 <p>CSE panel</p>
+
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Customer's ID</th>
+        <th>Message content</th>
+        <th>Date</th>
+    </tr>
+    {% for item in messages %}
+    <tr>
+        <td>{{ item.message_id }}</td>
+        <td>{{ item.customer_id }}</td>
+        <td>{{ item.content }}</td>
+        <td>{{ item.formatted_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+<form method="get" action="/cse_dashboard">
+    <input type="hidden" name="offset" value="{{ offset + limit }}">
+    <button type="submit">Load More</button>
+</form>
+
+
+
 <a href="{{ url_for('logout') }}" class="link">wylogowanie</a>
+
+
 
 {% endblock %}
