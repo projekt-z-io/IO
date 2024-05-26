@@ -1,51 +1,51 @@
-{% extends 'base.html'%}
+    {% extends 'base.html'%}
 
-{% block head %}
+    {% block head %}
 
-<title>Admin Panel - ParaBank</title>
+    <title>Admin Panel - ParaBank</title>
 
-{% endblock %}
-
-
-{% block body %}
-
-<p>Admin Panel</p>
-
-<table>
-    <tr>
-        <th>Pesel</th>
-        <th>Users's Login</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Active account</th>
-    </tr>
-    {% for item in users %}
-    <tr>
-        <td>{{ item.pesel }}</td>
-        <td>{{ item.login }}</td>
-        <td>{{ item.first_name }}</td>
-        <td>{{ item.last_name }}</td>
-        {% if item.account_active == True %}
-        <td>Yes</td>
-        {% else %}
-        <td>No</td>
-        {% endif %}
-        <td>
-            <form method="post" action="{{ url_for('change_account_activity', pesel=item.pesel) }}">
-                <button type="submit">Change Activity</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
-<form method="get" action="/admin_dashboard">
-    <input type="hidden" name="offset" value="{{ offset + limit }}">
-    <button type="submit">Load More</button>
-</form>
+    {% endblock %}
 
 
+    {% block body %}
 
-<a href="{{ url_for('logout') }}" class="link">wylogowanie</a>
+    <p>Admin Panel</p>
 
-{% endblock %}
+    <table>
+        <tr>
+            <th>Pesel</th>
+            <th>Users's Login</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Active account</th>
+        </tr>
+        {% for item in users %}
+        <tr>
+            <td>{{ item.pesel }}</td>
+            <td>{{ item.login }}</td>
+            <td>{{ item.first_name }}</td>
+            <td>{{ item.last_name }}</td>
+            {% if item.account_active == True %}
+            <td>Yes</td>
+            {% else %}
+            <td>No</td>
+            {% endif %}
+            <td>
+                <form method="post" action="{{ url_for('change_account_activity', pesel=item.pesel) }}">
+                    <button type="submit">Change Activity</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <form method="get" action="/admin_dashboard">
+        <input type="hidden" name="offset" value="{{ offset + limit }}">
+        <button type="submit">Load More</button>
+    </form>
+
+
+
+    <a href="{{ url_for('logout') }}" class="link">wylogowanie</a>
+
+    {% endblock %}
