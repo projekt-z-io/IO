@@ -1,6 +1,6 @@
 from app.__init__ import app, db, Customers, Users, PersonalData,CustomerServiceEmployees, Admins, bcrypt, Employees, Messages
 from flask import render_template, redirect, url_for, request
-from app.models.utils import Login_form, Register_form, Transfer_form, create_new_employee_id,create_new_admin_id ,get_messages, get_users ,get_transfers, send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
+from app.models.utils import Login_form, Register_form, Transfer_form,create_new_cse_id ,get_messages, get_users ,get_transfers, send_transfer, register_customer, create_new_login, create_new_iban, create_new_customer_id, match_register_error_to_description
 from flask_login import login_user, LoginManager, logout_user, login_required, current_user
 from app.models.validators import str_to_date, validate_transfer
 import datetime
@@ -16,7 +16,6 @@ login_manager.login_view = 'login'
 def load_user(pesel):
     return Users.query.get(pesel)
 
-
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -29,6 +28,8 @@ def login():
         if user_is_employee(form.login.data):
             return redirect(url_for('employee_login'))
         user = Users.query.filter_by(login=form.login.data).first()
+        if user.account_active == False:
+            return render_template('login.html',form=form, error=1)
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
@@ -83,6 +84,8 @@ def employee_login():
     form = Login_form()
     if form.validate_on_submit():
         user = Users.query.filter_by(login=form.login.data).first()
+        if user.account_active == False:
+            return render_template('employee_login.html',form=form, error=1)
         employee = Employees.query.filter_by(pesel=user.pesel).first()
         if not(employee):
             return render_template('employee_login.html')

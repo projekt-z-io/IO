@@ -17,6 +17,10 @@
     {{ form.submit }}
 </form>
 
+{% if error == 1 %}
+    <p>Twoje konto zostało dezaktywowane</p>
+{% endif %}
+
 <a href="{{ url_for('register') }}">Nie masz konta? Zarejestruj sie</a>
 <a href="{{ url_for('employee_login') }}">Jesteś pracownikiem? Zaloguj się tutaj</a>
 
