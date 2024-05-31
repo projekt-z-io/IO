@@ -1,4 +1,4 @@
-*/__pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
 *.pyd
@@ -6,8 +6,9 @@
 dane_testowe.txt
 *.vpp
 *.docx
-*.md
+**.md
 files.txt
 *.odt
 *.pdf
 .gitignore
+/.git/
