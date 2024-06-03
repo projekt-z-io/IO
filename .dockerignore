@@ -4,11 +4,11 @@
 *.pyd
 /env/
 dane_testowe.txt
-*.vpp
-*.docx
+**.vpp
+**.docx
 **.md
 files.txt
-*.odt
-*.pdf
+**.odt
+**.pdf
 .gitignore
 /.git/
